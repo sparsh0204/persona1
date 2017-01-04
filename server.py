@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, session, flash
 from functools import wraps
-import sqlite3 as sql
+import pymysql.cursors
 import models as dbhandler
 
 app = Flask(__name__)
@@ -32,15 +32,17 @@ def welcome():
 def login():
     error = None
     if request.method == 'POST':
-        if str(dbhandler.retrieveUsers(request.form['username'])[0][0]) == None:
+        try:
+            if str(dbhandler.retrieveUsers(request.form['username'])[0][0]) == request.form['password']:
+                session['logged_in'] = True
+                flash('Login successful.')
+                return render_template('welcome.html')
+            else:
+                error = 'Invalid Credentials. Please try again.'
+        except IndexError:
             error = 'User does not exists please register first'
             return render_template('login.html', error=error)
-        if str(dbhandler.retrieveUsers(request.form['username'])[0][0]) == request.form['password']:
-            session['logged_in'] = True
-            flash('Login successful.')
-            return render_template('welcome.html')
-        else:
-            error = 'Invalid Credentials. Please try again.'
+        
     return render_template('login.html', error=error)
 
 @app.route('/signup', methods=['GET', 'POST'])

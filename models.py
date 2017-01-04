@@ -1,22 +1,22 @@
-import sqlite3 as sql
+import pymysql.cursors
 
 def insertUser(username,password,age):
-    con = sql.connect("database.db")
+    con = pymysql.connect(host="localhost",user = "root",passwd = "qwertyy", db = "python")
     cur = con.cursor()
-    cur.execute("INSERT INTO users (username,password,age) VALUES (?,?,?)", (username,password,age))
+    cur.execute("INSERT INTO users (username,password,age) VALUES (%s,%s,%s)", (username,password,age))
     con.commit()
     con.close()
 
 def retrieveUsers(username):
-    con = sql.connect("database.db")
+    con = pymysql.connect(host="localhost",user = "root",passwd = "qwertyy", db = "python")
     cur = con.cursor()
-    cur.execute("SELECT password FROM users WHERE username LIKE ?", (username,))
+    cur.execute("SELECT password FROM users WHERE username LIKE %s", (username,))
     users = cur.fetchall()
     con.close()
     return users
 
 def allusernames():
-    con = sql.connect("database.db")
+    con = pymysql.connect(host="localhost",user = "root",passwd = "qwertyy", db = "python")
     cur = con.cursor()
     cur.execute("SELECT username FROM users")
     users = cur.fetchall()
