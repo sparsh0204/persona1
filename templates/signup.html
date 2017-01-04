@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="container">
+      <h1>Create a new id</h1>
+      <br>
+      <form action="" method="post">
+      <h4>Username</h4>
+        <input type="text" placeholder="Username" name="username" value="{{
+          request.form.username }}"><br>
+          <h4>Password</h4>
+         <input type="password" placeholder="Password" name="password" value="{{
+          request.form.password }}"><br>
+          <h4>Age</h4>
+         <input type="text" placeholder="Age" name="age" value="{{
+          request.form.age }}"><br><br>
+          
+        <input class="btn btn-default" type="submit" value="Register">
+      </form>
+      <a href={{ url_for('login') }}>Click here</a> to Login.<br>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}</p>
+      {% endif %}
+      {% for message in get_flashed_messages() %}
+        {{ message }}
+      {% endfor %}
+    </div>
+{% endblock %}
